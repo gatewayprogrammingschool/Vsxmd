@@ -19,43 +19,36 @@
   </ItemGroup>
   <!-- NuGet Metadata: https://docs.microsoft.com/en-us/dotnet/core/tools/csproj#nuget-metadata-properties -->
   <PropertyGroup>
-    <Title>Vsxmd</Title>
-    <Version>0.0.0</Version>
+    <Title>Vsxmd.Ninja</Title>
+    <Version>1.0.3</Version>
     <Authors>Junle Li, Sales Lessa Lopes</Authors>
     <Description>VS XML documentation -&gt; Markdown syntax.</Description>
     <Copyright>Copyright 2015-Present</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/lijunle/Vsxmd</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/gatewayprogrammingschool/Vsxmd</PackageProjectUrl>
     <PackageTags>Vsxmd VS XML document Markdown</PackageTags>
     <DevelopmentDependency>true</DevelopmentDependency>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <PackageId>Vsxmd.Ninja</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <!-- The parameter _PackageFiles is declared in NuGet.Build.Tasks.Pack.targets -->
-    <_PackageFiles Include="bin\$(Configuration)\$(TargetFramework)\linux-musl-x64\publish\Vsxmd" PackagePath="tools\linux-musl-x64\" />
-    <_PackageFiles Include="bin\$(Configuration)\$(TargetFramework)\linux-x64\publish\Vsxmd" PackagePath="tools\linux-x64\" />
-    <_PackageFiles Include="bin\$(Configuration)\$(TargetFramework)\osx-x64\publish\Vsxmd" PackagePath="tools\osx-x64\" />
-    <_PackageFiles Include="bin\$(Configuration)\$(TargetFramework)\win-x64\publish\Vsxmd.exe" PackagePath="tools\win-x64\" />
-    <_PackageFiles Include="bin\$(Configuration)\$(TargetFramework)\win-x86\publish\Vsxmd.exe" PackagePath="tools\win-x86\" />
+    <_PackageFiles Include="bin\$(Configuration)\$(TargetFramework)\publish\Vsxmd.*" PackagePath="tools\win-x64\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\LICENSE" Link="LICENSE" PackagePath="\" />
-    <Content Include="build\Vsxmd.targets" PackagePath="build\" />
+    <Content Include="build\Vsxmd.Ninja.targets" PackagePath="build\" />
   </ItemGroup>
   <!-- Generate the Markdown file for itself -->
-  <!--<Target Name="VsxmdPreparation" AfterTargets="PostBuildEvent">
+  <Target Name="VsxmdPreparation" AfterTargets="PostBuildEvent">
     <PropertyGroup>
-      <VsxmdRuntime Condition=" $([MSBuild]::IsOsPlatform('Linux')) ">linux-x64</VsxmdRuntime>
-      <VsxmdRuntime Condition=" $([MSBuild]::IsOsPlatform('Linux')) AND (EXISTS('/lib/ld-musl-x86_64.so.1') OR EXISTS('/usr/lib/ld-musl-x86_64.so.1')) ">linux-musl-x64</VsxmdRuntime>
-      <VsxmdRuntime Condition=" $([MSBuild]::IsOsPlatform('OSX')) ">osx-x64</VsxmdRuntime>
       <VsxmdRuntime Condition=" $([MSBuild]::IsOsPlatform('Windows')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' ">win-x64</VsxmdRuntime>
-      <VsxmdRuntime Condition=" $([MSBuild]::IsOsPlatform('Windows')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X86' ">win-x86</VsxmdRuntime>
       <VsxmdBinary Condition=" '$(RuntimeIdentifier)' == '' AND EXISTS('$(OutputPath)/Vsxmd.dll') ">$(OutputPath)/Vsxmd</VsxmdBinary>
       <VsxmdBinary Condition=" '$(RuntimeIdentifier)' != '' AND EXISTS('$(OutputPath)/../Vsxmd.dll') ">$(OutputPath)/../Vsxmd</VsxmdBinary>
       <VsxmdBinary Condition=" '$(RuntimeIdentifier)' != '' AND EXISTS('$(OutputPath)/../$(VsxmdRuntime)/Vsxmd.dll') ">$(OutputPath)/../$(VsxmdRuntime)/Vsxmd</VsxmdBinary>
     </PropertyGroup>
-  </Target>-->
-  <Import Project="$(MSBuildThisFileDirectory)\build\Vsxmd.targets" />
+  </Target>
+  <Import Project="$(MSBuildThisFileDirectory)\build\Vsxmd.Ninja.targets" />
 
 </Project>

@@ -146,7 +146,7 @@ namespace Vsxmd.Units
         {
             /// <inheritdoc />
             public int Compare(MemberUnit x, MemberUnit y) =>
-                $"{x.TypeName}".CompareTo($"{y.TypeName}");
+                $"{x.name}".CompareTo($"{y.name}");
         }
     }
 }

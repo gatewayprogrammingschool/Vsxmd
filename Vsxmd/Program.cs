@@ -40,9 +40,6 @@ namespace Vsxmd
                     return;
                 }
 
-                Debugger.Launch();
-                Debugger.Break();
-
                 string xmlPath = args[0];
                 string markdownPath = args.ElementAtOrDefault(1);
 
