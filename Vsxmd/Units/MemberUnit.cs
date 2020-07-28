@@ -66,7 +66,7 @@ namespace Vsxmd.Units
                 ? Enumerable.Empty<string>()
                 : new[]
                 {
-                    "##### Summary",
+                    "### Summary",
                     "*Inherit from parent.*",
                 };
 
@@ -75,7 +75,7 @@ namespace Vsxmd.Units
             ? Enumerable.Empty<string>()
             : new[]
             {
-                $"##### Namespace",
+                $"### Namespace",
                 $"{this.name.Namespace}",
             };
 
@@ -146,7 +146,7 @@ namespace Vsxmd.Units
         {
             /// <inheritdoc />
             public int Compare(MemberUnit x, MemberUnit y) =>
-                x.name.CompareTo(y.name);
+                $"{x.TypeName}".CompareTo($"{y.TypeName}");
         }
     }
 }

@@ -57,8 +57,8 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="href">The href.</param>
         /// <returns>The anchor for the <paramref name="href"/>.</returns>
-        internal static string ToAnchor(this string href) =>
-            $"<a name='{href}'></a>\n";
+        internal static string ToAnchor(this string href) => 
+            $"<a name='{href}'></a>";
 
         /// <summary>
         /// Generate "to here" link for the <paramref name="href"/>.
@@ -66,7 +66,7 @@ namespace Vsxmd.Units
         /// <param name="href">The href.</param>
         /// <returns>The "to here" link for the <paramref name="href"/>.</returns>
         internal static string ToHereLink(this string href) =>
-            $"[#](#{href} 'Go To Here')";
+            $"[#](#{href})";
 
         /// <summary>
         /// Generate the reference link for the <paramref name="memberName"/>.
@@ -168,7 +168,7 @@ namespace Vsxmd.Units
                     case "value":
                         return $"{child.Value.AsCode()}{child.NextNode.AsSpanMargin()}";
                     case "code":
-                        var lang = child.Attribute("lang")?.Value ?? string.Empty;
+                        var lang = child.Attribute("lang")?.Value ?? "csharp";
 
                         string value = child.Nodes().First().ToString().Replace("\t", "    ", StringComparison.InvariantCulture);
                         var indexOf = FindIndexOf(value);

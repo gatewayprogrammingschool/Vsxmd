@@ -44,7 +44,7 @@
     <Content Include="build\Vsxmd.targets" PackagePath="build\" />
   </ItemGroup>
   <!-- Generate the Markdown file for itself -->
-  <Target Name="VsxmdPreparation" AfterTargets="PostBuildEvent">
+  <!--<Target Name="VsxmdPreparation" AfterTargets="PostBuildEvent">
     <PropertyGroup>
       <VsxmdRuntime Condition=" $([MSBuild]::IsOsPlatform('Linux')) ">linux-x64</VsxmdRuntime>
       <VsxmdRuntime Condition=" $([MSBuild]::IsOsPlatform('Linux')) AND (EXISTS('/lib/ld-musl-x86_64.so.1') OR EXISTS('/usr/lib/ld-musl-x86_64.so.1')) ">linux-musl-x64</VsxmdRuntime>
@@ -55,7 +55,7 @@
       <VsxmdBinary Condition=" '$(RuntimeIdentifier)' != '' AND EXISTS('$(OutputPath)/../Vsxmd.dll') ">$(OutputPath)/../Vsxmd</VsxmdBinary>
       <VsxmdBinary Condition=" '$(RuntimeIdentifier)' != '' AND EXISTS('$(OutputPath)/../$(VsxmdRuntime)/Vsxmd.dll') ">$(OutputPath)/../$(VsxmdRuntime)/Vsxmd</VsxmdBinary>
     </PropertyGroup>
-  </Target>
+  </Target>-->
   <Import Project="$(MSBuildThisFileDirectory)\build\Vsxmd.targets" />
 
 </Project>

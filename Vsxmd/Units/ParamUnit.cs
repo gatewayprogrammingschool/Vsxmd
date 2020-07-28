@@ -66,7 +66,7 @@ namespace Vsxmd.Units
                     ? Enumerable.Empty<string>()
                     : new[]
                     {
-                        "##### Parameters",
+                        "### Parameters",
                         $"This {memberKind.ToLowerString()} has no parameters.",
                     };
             }
@@ -84,7 +84,7 @@ namespace Vsxmd.Units
 
             return new[]
             {
-                "##### Parameters",
+                "### Parameters",
                 string.Join("\n", table),
             };
         }

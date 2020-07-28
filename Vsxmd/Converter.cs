@@ -42,9 +42,6 @@ namespace Vsxmd
 
         private static IEnumerable<IUnit> ToUnits(XElement docElement)
         {
-            // assembly unit
-            var assemblyUnit = new AssemblyUnit(docElement.Element("assembly"));
-
             // member units
             var memberUnits = docElement
                 .Element("members")
@@ -57,11 +54,8 @@ namespace Vsxmd
                 .OrderBy(member => member, MemberUnit.Comparer);
 
             // table of contents
-            var tableOfContents = new TableOfContents(memberUnits);
 
-            return new IUnit[] { assemblyUnit }
-                .Concat(new[] { tableOfContents })
-                .Concat(memberUnits);
+            return memberUnits.ToArray();
         }
     }
 }

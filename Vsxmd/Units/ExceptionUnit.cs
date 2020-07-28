@@ -63,7 +63,7 @@ namespace Vsxmd.Units
 
             return new[]
             {
-                "##### Exceptions",
+                "### Exceptions",
                 string.Join("\n", table),
             };
         }

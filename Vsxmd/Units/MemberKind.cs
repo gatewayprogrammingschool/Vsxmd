@@ -14,31 +14,31 @@ namespace Vsxmd.Units
         /// <summary>
         /// Not supported member kind.
         /// </summary>
-        NotSupported,
+        NotSupported = 99,
 
         /// <summary>
         /// Type.
         /// </summary>
-        Type,
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        Constructor,
+        Type = 0,
 
         /// <summary>
         /// Constants
         /// </summary>
-        Constants,
+        Constants = 1,
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        Constructor = 2,
 
         /// <summary>
         /// Property.
         /// </summary>
-        Property,
+        Property = 3,
 
         /// <summary>
         /// Method.
         /// </summary>
-        Method,
+        Method = 4,
     }
 }

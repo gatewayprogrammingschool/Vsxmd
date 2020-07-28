@@ -408,14 +408,14 @@
             Type.
             </summary>
         </member>
-        <member name="F:Vsxmd.Units.MemberKind.Constructor">
-            <summary>
-            Constructor.
-            </summary>
-        </member>
         <member name="F:Vsxmd.Units.MemberKind.Constants">
             <summary>
             Constants
+            </summary>
+        </member>
+        <member name="F:Vsxmd.Units.MemberKind.Constructor">
+            <summary>
+            Constructor.
             </summary>
         </member>
         <member name="F:Vsxmd.Units.MemberKind.Property">

@@ -63,7 +63,7 @@ namespace Vsxmd.Units
 
             return new[]
             {
-                "##### Generic Types",
+                "### Generic Types",
                 string.Join("\n", table),
             };
         }

@@ -54,9 +54,9 @@ namespace Vsxmd.Units
             ? MemberKind.Constants
             : this.type == 'P'
             ? MemberKind.Property
-            : this.type == 'M' && this.name.Contains(".#ctor", StringComparison.InvariantCulture)
+            : this.type == 'M' && this.name.Contains(".ctor", StringComparison.InvariantCulture)
             ? MemberKind.Constructor
-            : this.type == 'M' && !this.name.Contains(".#ctor", StringComparison.InvariantCulture)
+            : this.type == 'M' && !this.name.Contains(".ctor", StringComparison.InvariantCulture)
             ? MemberKind.Method
             : MemberKind.NotSupported;
 
@@ -68,10 +68,10 @@ namespace Vsxmd.Units
             this.Kind == MemberKind.Type ||
             this.Kind == MemberKind.Constants ||
             this.Kind == MemberKind.Property
-            ? $"[{this.FriendlyName.Escape()}](#{this.Href} '{this.StrippedName}')"
+            ? $"[{this.FriendlyName.Escape()}](#{this.Href})"
             : this.Kind == MemberKind.Constructor ||
               this.Kind == MemberKind.Method
-            ? $"[{this.FriendlyName.Escape()}({this.paramNames.Join(",")})](#{this.Href} '{this.StrippedName}')"
+            ? $"[{this.FriendlyName.Escape()}({this.paramNames.Join(",")})](#{this.Href})"
             : string.Empty;
 
         /// <summary>
@@ -84,13 +84,13 @@ namespace Vsxmd.Units
         /// </example>
         internal string Caption =>
             this.Kind == MemberKind.Type
-            ? $"{this.Href.ToAnchor()}## {this.FriendlyName.Escape()} `{this.Kind.ToLowerString()}`"
+            ? $"##### {this.FriendlyName.Escape()}\n" + $"# {this.Href.ToAnchor()}{this.FriendlyName.Escape()}"
             : this.Kind == MemberKind.Constants ||
               this.Kind == MemberKind.Property
-            ? $"{this.Href.ToAnchor()}### {this.FriendlyName.Escape()} `{this.Kind.ToLowerString()}`"
+            ? $"#### {this.FriendlyName.Escape()}\n" + $"## {this.Href.ToAnchor()}{this.FriendlyName.Escape()}"
             : this.Kind == MemberKind.Constructor ||
               this.Kind == MemberKind.Method
-            ? $"{this.Href.ToAnchor()}### {this.FriendlyName.Escape()}({this.paramNames.Join(",")}) `{this.Kind.ToLowerString()}`"
+            ? $"#### {this.FriendlyName.Escape()}\n" + $"## {this.Href.ToAnchor()}{this.FriendlyName.Escape()}({this.paramNames.Join(",")})"
             : string.Empty;
 
         /// <summary>
@@ -130,7 +130,13 @@ namespace Vsxmd.Units
             .Replace('.', '-')
             .Replace(':', '-')
             .Replace('(', '-')
-            .Replace(')', '-');
+            .Replace(')', '-')
+            .Replace('{', '-')
+            .Replace('}', '-')
+            .Replace('[', '-')
+            .Replace(']', '-')
+            .Replace('#', '-')
+            .Replace('`', '-');
 
         private string StrippedName =>
             this.name.Substring(2);
@@ -216,7 +222,7 @@ namespace Vsxmd.Units
         internal string ToReferenceLink(bool useShortName) =>
             $"{this.Namespace}.".StartsWith("System.", StringComparison.Ordinal)
             ? $"[{this.GetReferenceName(useShortName).Escape()}](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:{this.MsdnName} '{this.StrippedName}')"
-            : $"[{this.GetReferenceName(useShortName).Escape()}](#{this.Href} '{this.StrippedName}')";
+            : $"[{this.GetReferenceName(useShortName).Escape()}](#{this.Href})";
 
         private string GetReferenceName(bool useShortName) =>
             !useShortName
