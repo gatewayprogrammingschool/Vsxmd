@@ -22,8 +22,8 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="element">The assembly XML element.</param>
         /// <exception cref="ArgumentException">Throw if XML element name is not <c>assembly</c>.</exception>
-        internal AssemblyUnit(XElement element)
-            : base(element, "assembly")
+        internal AssemblyUnit(XDocument document, XElement element)
+            : base(document, element, "assembly")
         {
         }
 
@@ -33,7 +33,9 @@ namespace Vsxmd.Units
         public override IEnumerable<string> ToMarkdown() =>
             new[]
             {
-                $"{Href.ToAnchor()}# {this.AssemblyName}",
+                $"##### {this.AssemblyName}",
+                $"# {Href.ToAnchor()}Assembly: {this.AssemblyName}",
+                $"!include(./{this.AssemblyName}.md)",
             };
     }
 }

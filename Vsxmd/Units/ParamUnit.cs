@@ -24,8 +24,8 @@ namespace Vsxmd.Units
         /// <param name="element">The param XML element.</param>
         /// <param name="paramType">The parameter type corresponding to the param XML element.</param>
         /// <exception cref="ArgumentException">Throw if XML element name is not <c>param</c>.</exception>
-        internal ParamUnit(XElement element, string paramType)
-            : base(element, "param")
+        internal ParamUnit(XDocument document, XElement element, string paramType)
+            : base(document, element, "param")
         {
             this.paramType = paramType;
         }
@@ -54,6 +54,7 @@ namespace Vsxmd.Units
         /// <para>If parent element kind is not the value mentioned above, it returns an empty string.</para>
         /// </remarks>
         internal static IEnumerable<string> ToMarkdown(
+            XDocument document,
             IEnumerable<XElement> elements,
             IEnumerable<string> paramTypes,
             MemberKind memberKind)
@@ -72,7 +73,7 @@ namespace Vsxmd.Units
             }
 
             var markdowns = elements
-                .Zip(paramTypes, (element, type) => new ParamUnit(element, type))
+                .Zip(paramTypes, (element, type) => new ParamUnit(document, element, type))
                 .SelectMany(unit => unit.ToMarkdown());
 
             var table = new[]

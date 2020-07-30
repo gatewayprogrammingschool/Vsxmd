@@ -21,8 +21,8 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="element">The summary XML element.</param>
         /// <exception cref="ArgumentException">Throw if XML element name is not <c>summary</c>.</exception>
-        internal SummaryUnit(XElement element)
-            : base(element, "summary")
+        internal SummaryUnit(XDocument document, XElement element)
+            : base(document, element, "summary")
         {
         }
 
@@ -32,6 +32,8 @@ namespace Vsxmd.Units
             {
                 "### Summary",
                 this.ElementContent,
+                string.Empty,
+                $"[Parent]({ParentLink})",
             };
 
         /// <summary>
@@ -40,9 +42,9 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="element">The summary XML element.</param>
         /// <returns>The generated Markdown.</returns>
-        internal static IEnumerable<string> ToMarkdown(XElement element) =>
+        internal static IEnumerable<string> ToMarkdown(XDocument document, XElement element) =>
             element != null
-                ? new SummaryUnit(element).ToMarkdown()
+                ? new SummaryUnit(document, element).ToMarkdown()
                 : Enumerable.Empty<string>();
     }
 }

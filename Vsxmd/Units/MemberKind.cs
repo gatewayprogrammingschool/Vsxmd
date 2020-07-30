@@ -19,26 +19,26 @@ namespace Vsxmd.Units
         /// <summary>
         /// Type.
         /// </summary>
-        Type = 0,
+        Type = 1,
 
         /// <summary>
         /// Constants
         /// </summary>
-        Constants = 1,
+        Constants = 2,
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        Constructor = 2,
+        Constructor = 3,
 
         /// <summary>
         /// Property.
         /// </summary>
-        Property = 3,
+        Property = 4,
 
         /// <summary>
         /// Method.
         /// </summary>
-        Method = 4,
+        Method = 5,
     }
 }

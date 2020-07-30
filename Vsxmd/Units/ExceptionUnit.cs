@@ -21,8 +21,8 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="element">The exception XML element.</param>
         /// <exception cref="ArgumentException">Throw if XML element name is not <c>exception</c>.</exception>
-        internal ExceptionUnit(XElement element)
-            : base(element, "exception")
+        internal ExceptionUnit(XDocument document, XElement element)
+            : base(document, element, "exception")
         {
         }
 
@@ -43,7 +43,7 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="elements">The exception XML element list.</param>
         /// <returns>The generated Markdown.</returns>
-        internal static IEnumerable<string> ToMarkdown(IEnumerable<XElement> elements)
+        internal static IEnumerable<string> ToMarkdown(XDocument document, IEnumerable<XElement> elements)
         {
             if (!elements.Any())
             {
@@ -51,7 +51,7 @@ namespace Vsxmd.Units
             }
 
             var markdowns = elements
-                .Select(element => new ExceptionUnit(element))
+                .Select(element => new ExceptionUnit(document, element))
                 .SelectMany(unit => unit.ToMarkdown());
 
             var table = new[]

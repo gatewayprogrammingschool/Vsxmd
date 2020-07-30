@@ -35,25 +35,29 @@ namespace Vsxmd
 
         /// <inheritdoc/>
         public string ToMarkdown() =>
-            ToUnits(this.document.Root)
+            ToUnits(this.document, this.document.Root)
                 .SelectMany(x => x.ToMarkdown())
                 .Join("\n\n")
                 .Suffix("\n");
 
-        private static IEnumerable<IUnit> ToUnits(XElement docElement)
+        private static IEnumerable<IUnit> ToUnits(XDocument document, XElement docElement)
         {
+            var assemblyNode = docElement.Element("assembly");
+            var au = new AssemblyUnit(document, assemblyNode);
+
             // member units
             var memberUnits = docElement
                 .Element("members")
                 .Elements("member")
-                .Select(element => new MemberUnit(element))
+                .Select(element => new MemberUnit(document, element))
                 .Where(member => member.Kind != MemberKind.NotSupported)
                 .GroupBy(unit => unit.TypeName)
-                .Select(MemberUnit.ComplementType)
+                .Select(group => MemberUnit.ComplementType(document, group))
                 .SelectMany(group => group)
-                .OrderBy(member => member, MemberUnit.Comparer);
+                .OrderBy(member => member, MemberUnit.Comparer)
+                .ToList<IUnit>();
 
-            // table of contents
+            memberUnits.Insert(0, au);
 
             return memberUnits.ToArray();
         }

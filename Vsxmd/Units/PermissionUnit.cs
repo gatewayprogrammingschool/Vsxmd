@@ -21,8 +21,8 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="element">The permission XML element.</param>
         /// <exception cref="ArgumentException">Throw if XML element name is not <c>permission</c>.</exception>
-        internal PermissionUnit(XElement element)
-            : base(element, "permission")
+        internal PermissionUnit(XDocument document, XElement element)
+            : base(document, element, "permission")
         {
         }
 
@@ -43,7 +43,7 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="elements">The permission XML element list.</param>
         /// <returns>The generated Markdown.</returns>
-        internal static IEnumerable<string> ToMarkdown(IEnumerable<XElement> elements)
+        internal static IEnumerable<string> ToMarkdown(XDocument document, IEnumerable<XElement> elements)
         {
             if (!elements.Any())
             {
@@ -51,7 +51,7 @@ namespace Vsxmd.Units
             }
 
             var markdowns = elements
-                .Select(element => new PermissionUnit(element))
+                .Select(element => new PermissionUnit(document, element))
                 .SelectMany(unit => unit.ToMarkdown());
 
             var table = new[]

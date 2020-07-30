@@ -4,6 +4,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System.Xml;
+using System.Xml.XPath;
+
 namespace Vsxmd.Units
 {
     using System;
@@ -16,8 +19,6 @@ namespace Vsxmd.Units
     /// </summary>
     internal class MemberUnit : BaseUnit
     {
-        private readonly MemberName name;
-
         static MemberUnit()
         {
             Comparer = new MemberUnitComparer();
@@ -26,14 +27,12 @@ namespace Vsxmd.Units
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberUnit"/> class.
         /// </summary>
+        /// <param name="document"></param>
         /// <param name="element">The member XML element.</param>
         /// <exception cref="ArgumentException">Throw if XML element name is not <c>member</c>.</exception>
-        internal MemberUnit(XElement element)
-            : base(element, "member")
+        internal MemberUnit(XDocument document, XElement element)
+            : base(document, element, "member")
         {
-            this.name = new MemberName(
-                this.GetAttribute("name"),
-                this.GetChildren("param").Select(x => x.Attribute("name").Value));
         }
 
         /// <summary>
@@ -80,34 +79,38 @@ namespace Vsxmd.Units
             };
 
         private IEnumerable<string> Summary =>
-            SummaryUnit.ToMarkdown(this.GetChild("summary"));
+            SummaryUnit.ToMarkdown(this.Document, this.GetChild("summary"));
+
+        private IEnumerable<string> ChildMembers =>
+            ChildMembersUnit.ToMarkdown(this.Document, this.Element);
 
         private IEnumerable<string> Returns =>
-            ReturnsUnit.ToMarkdown(this.GetChild("returns"));
+            ReturnsUnit.ToMarkdown(this.Document, this.GetChild("returns"));
 
         private IEnumerable<string> Params =>
             ParamUnit.ToMarkdown(
+                this.Document,
                 this.GetChildren("param"),
                 this.name.GetParamTypes(),
                 this.Kind);
 
         private IEnumerable<string> Typeparams =>
-            TypeparamUnit.ToMarkdown(this.GetChildren("typeparam"));
+            TypeparamUnit.ToMarkdown(Document, this.GetChildren("typeparam"));
 
         private IEnumerable<string> Exceptions =>
-            ExceptionUnit.ToMarkdown(this.GetChildren("exception"));
+            ExceptionUnit.ToMarkdown(Document, this.GetChildren("exception"));
 
         private IEnumerable<string> Permissions =>
-            PermissionUnit.ToMarkdown(this.GetChildren("permission"));
+            PermissionUnit.ToMarkdown(Document, this.GetChildren("permission"));
 
         private IEnumerable<string> Example =>
-            ExampleUnit.ToMarkdown(this.GetChild("example"));
+            ExampleUnit.ToMarkdown(Document, this.GetChild("example"));
 
         private IEnumerable<string> Remarks =>
-            RemarksUnit.ToMarkdown(this.GetChild("remarks"));
+            RemarksUnit.ToMarkdown(Document, this.GetChild("remarks"));
 
         private IEnumerable<string> Seealsos =>
-            SeealsoUnit.ToMarkdown(this.GetChildren("seealso"));
+            SeealsoUnit.ToMarkdown(Document, this.GetChildren("seealso"));
 
         /// <inheritdoc />
         public override IEnumerable<string> ToMarkdown() =>
@@ -115,6 +118,7 @@ namespace Vsxmd.Units
                 .Concat(this.Namespace)
                 .Concat(this.InheritDoc)
                 .Concat(this.Summary)
+                .Concat(this.ChildMembers)
                 .Concat(this.Returns)
                 .Concat(this.Params)
                 .Concat(this.Typeparams)
@@ -131,22 +135,25 @@ namespace Vsxmd.Units
         /// <param name="group">The member unit group.</param>
         /// <returns>The complemented member unit group.</returns>
         internal static IEnumerable<MemberUnit> ComplementType(
+            XDocument document,
             IEnumerable<MemberUnit> group) =>
             group.Any(unit => unit.Kind == MemberKind.Type)
                 ? group
-                : group.Concat(new[] { Create(group.First().TypeName) });
+                : group.Concat(new[] { Create(document, group.First().TypeName) });
 
-        private static MemberUnit Create(string typeName) =>
+        private static MemberUnit Create(XDocument document, string typeName) =>
             new MemberUnit(
-                new XElement(
-                    "member",
-                    new XAttribute("name", $"T:{typeName}")));
+                document: document,
+                element: new XElement(
+                    name: "member",
+                    content: new XAttribute(name: "name", value: $"T:{typeName}")));
 
         private class MemberUnitComparer : IComparer<MemberUnit>
         {
             /// <inheritdoc />
             public int Compare(MemberUnit x, MemberUnit y) =>
-                $"{x.name}".CompareTo($"{y.name}");
+                $"{(int)x.name.Kind}:{x.TypeName}".CompareTo($"{(int)y.name.Kind}:{y.TypeName}");
         }
+
     }
 }

@@ -21,8 +21,8 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="element">The typeparam XML element.</param>
         /// <exception cref="ArgumentException">Throw if XML element name is not <c>typeparam</c>.</exception>
-        internal TypeparamUnit(XElement element)
-            : base(element, "typeparam")
+        internal TypeparamUnit(XDocument document, XElement element)
+            : base(document, element, "typeparam")
         {
         }
 
@@ -43,7 +43,7 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="elements">The param XML element list.</param>
         /// <returns>The generated Markdown.</returns>
-        internal static IEnumerable<string> ToMarkdown(IEnumerable<XElement> elements)
+        internal static IEnumerable<string> ToMarkdown(XDocument document, IEnumerable<XElement> elements)
         {
             if (!elements.Any())
             {
@@ -51,7 +51,7 @@ namespace Vsxmd.Units
             }
 
             var markdowns = elements
-                .Select(element => new TypeparamUnit(element))
+                .Select(element => new TypeparamUnit(document, element))
                 .SelectMany(unit => unit.ToMarkdown());
 
             var table = new[]

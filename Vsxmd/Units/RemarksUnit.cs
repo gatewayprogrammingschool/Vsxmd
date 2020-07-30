@@ -21,8 +21,8 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="element">The remarks XML element.</param>
         /// <exception cref="ArgumentException">Throw if XML element name is not <c>remarks</c>.</exception>
-        internal RemarksUnit(XElement element)
-            : base(element, "remarks")
+        internal RemarksUnit(XDocument document, XElement element)
+            : base(document, element, "remarks")
         {
         }
 
@@ -40,9 +40,9 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="element">The remarks XML element.</param>
         /// <returns>The generated Markdown.</returns>
-        internal static IEnumerable<string> ToMarkdown(XElement element) =>
+        internal static IEnumerable<string> ToMarkdown(XDocument document, XElement element) =>
             element != null
-                ? new RemarksUnit(element).ToMarkdown()
+                ? new RemarksUnit(document, element).ToMarkdown()
                 : Enumerable.Empty<string>();
     }
 }

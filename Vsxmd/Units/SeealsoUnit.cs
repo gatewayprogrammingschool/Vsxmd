@@ -21,8 +21,8 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="element">The seealso XML element.</param>
         /// <exception cref="ArgumentException">Throw if XML element name is not <c>seealso</c>.</exception>
-        internal SeealsoUnit(XElement element)
-            : base(element, "seealso")
+        internal SeealsoUnit(XDocument document, XElement element)
+            : base(document, element, "seealso")
         {
         }
 
@@ -39,7 +39,7 @@ namespace Vsxmd.Units
         /// </summary>
         /// <param name="elements">The seealso XML element list.</param>
         /// <returns>The generated Markdown.</returns>
-        internal static IEnumerable<string> ToMarkdown(IEnumerable<XElement> elements)
+        internal static IEnumerable<string> ToMarkdown(XDocument document, IEnumerable<XElement> elements)
         {
             if (!elements.Any())
             {
@@ -47,7 +47,7 @@ namespace Vsxmd.Units
             }
 
             var markdowns = elements
-                .Select(element => new SeealsoUnit(element))
+                .Select(element => new SeealsoUnit(document, element))
                 .SelectMany(unit => unit.ToMarkdown());
 
             return new[]

@@ -4,6 +4,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+/// <summary>
+/// Namespace Documentation
+/// </summary>
 namespace Vsxmd.Units
 {
     using System;
@@ -84,13 +87,13 @@ namespace Vsxmd.Units
         /// </example>
         internal string Caption =>
             this.Kind == MemberKind.Type
-            ? $"##### {this.FriendlyName.Escape()}\n" + $"# {this.Href.ToAnchor()}{this.FriendlyName.Escape()}"
+            ? $"##### {this.FriendlyName.Escape()}\n" + $"## Type: {this.Href.ToAnchor()}{this.FriendlyName.Escape()}"
             : this.Kind == MemberKind.Constants ||
               this.Kind == MemberKind.Property
-            ? $"#### {this.FriendlyName.Escape()}\n" + $"## {this.Href.ToAnchor()}{this.FriendlyName.Escape()}"
+            ? $"#### {this.FriendlyName.Escape()}\n" + $"### {Kind}: {this.Href.ToAnchor()}{this.FriendlyName.Escape()}"
             : this.Kind == MemberKind.Constructor ||
               this.Kind == MemberKind.Method
-            ? $"#### {this.FriendlyName.Escape()}\n" + $"## {this.Href.ToAnchor()}{this.FriendlyName.Escape()}({this.paramNames.Join(",")})"
+            ? $"#### {this.FriendlyName.Escape()}\n" + $"### {Kind}: {this.Href.ToAnchor()}{this.FriendlyName.Escape()}({this.paramNames.Join(",")})"
             : string.Empty;
 
         /// <summary>
@@ -116,6 +119,16 @@ namespace Vsxmd.Units
             ? this.NameSegments.TakeAllButLast(2).Join(".")
             : string.Empty;
 
+        internal string ParentStrippedName =>
+            this.Kind == MemberKind.Type
+                ? this.NameSegments.TakeAllButLast(1).Join(".") // assuming nested if this is being requested
+                : this.Kind == MemberKind.Constants ||
+                  this.Kind == MemberKind.Property ||
+                  this.Kind == MemberKind.Constructor ||
+                  this.Kind == MemberKind.Method
+                    ? this.NameSegments.TakeAllButLast(1).Join(".")
+                    : string.Empty;
+
         private string TypeShortName =>
             this.Kind == MemberKind.Type
             ? this.NameSegments.Last()
@@ -138,7 +151,7 @@ namespace Vsxmd.Units
             .Replace('#', '-')
             .Replace('`', '-');
 
-        private string StrippedName =>
+        internal string StrippedName =>
             this.name.Substring(2);
 
         private string LongName =>
@@ -150,7 +163,7 @@ namespace Vsxmd.Units
         private IEnumerable<string> NameSegments =>
             this.LongName.Split('.');
 
-        private string FriendlyName =>
+        internal string FriendlyName =>
             this.Kind == MemberKind.Type
             ? this.TypeShortName
             : this.Kind == MemberKind.Constants ||

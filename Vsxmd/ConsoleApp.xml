@@ -1,0 +1,502 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ConsoleApp</name>
+    </assembly>
+    <members>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel">
+             <summary>
+             View Model for managing Regular Expression patterns
+             used to whitelist tables from purging.
+             </summary>
+             <remarks>
+             ### Extends
+             * <see cref="T:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ObservableBase"/>
+             
+             ### Implements
+             * <seealso cref="T:System.IDisposable"/>
+            
+             ### Notes
+             __Constructed only via Dependency Injection.__
+             </remarks>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.ServiceProvider">
+            <summary>
+            <see cref="T:System.IServiceProvider"/> instance from
+            [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/) package.
+            </summary>
+            <remarks>
+            Dependency Injection is used throughout the application except where IDisposable instances must be immediately
+            disposed.
+            </remarks>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Logger">
+            <summary>
+            <see cref="T:Microsoft.Extensions.Logging.ILogger"/> instance from
+            [Microsoft.Extensions.Logging](https://www.nuget.org/packages/Microsoft.Extensions.Logging/) package.
+            </summary>
+            <remarks>
+            __Created by DI only.__
+            </remarks>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.IgnoredTableRepository">
+            <summary>
+            NetForum ORM-based Repository for the
+            <see cref="T:AAP.Applications.NetforumDataPurge.ConsoleApp.NetForum.Entities.IgnoredTable"/> Entity.
+            </summary>
+            <remarks>
+            __Created by DI only.__
+            </remarks>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.SearchViewModel">
+            <summary>
+            View Model that provides several common functions such as holding the
+            <seealso cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/> that holds
+            the primary key for each NetForum table.
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.StatusBarViewModel">
+            <summary>
+            Local copy of the <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.StatusBarViewModel"/>.  Should
+            be same instance as that held by the <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Whitelist"/>
+            Window.
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.DashboardViewModel},AAP.Applications.NetforumDataPurge.ConsoleApp.NetForum.Repositories.IgnoredTableRepository,AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.SearchViewModel,AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.StatusBarViewModel)">
+            <summary>
+            Constructor that provides resources created by Dependency Injection.
+            </summary>
+            <param name="serviceProvider"></param>
+            <param name="logger"></param>
+            <param name="ignoredTableRepository"></param>
+            <param name="searchViewModel"></param>
+            <param name="statusBarViewModel"></param>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Initialize">
+            <summary>
+            Called by <seealso cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Whitelist"/> Window
+            after it is loaded.
+            </summary>
+            <remarks>
+            * Initializes the <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.SearchViewModel"/> if
+            necessary.
+            * Always reads the `P05-Whitelist Table`.
+            </remarks>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Regex">
+            <summary>
+            The currently selected <see cref="T:AAP.Applications.NetforumDataPurge.ConsoleApp.NetForum.Entities.IgnoredTable"/>'s
+            `Regex` property value.
+            </summary>
+            <remarks>
+            Updates in real-time when user types in the pattern text box.
+            </remarks>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Whitelist">
+            <summary>
+            <seealso cref="T:System.Collections.ObjectModel.ObservableCollection`1"/> containing the
+            <see cref="T:AAP.Applications.NetforumDataPurge.ConsoleApp.NetForum.Entities.IgnoredTable"/> Entities loaded and persisted in the
+            `P05-Whitelist Table`.
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Matches">
+            <summary>
+            Tables matching the current pattern expressed in the `Regex` property.
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.TextChangedCommand">
+            <summary>
+            <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.TextChangedCommand"/> instance used by the <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Whitelist"/>
+            window.  Used to keep the `Regex` property updated in real-time.
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.MatchTablesCommand">
+            <summary>
+            <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.MatchTablesCommand"/> instance used by the <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Whitelist"/>
+            window.  Used to apply the filter to the NetForum tables.
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.AddToWhitelistCommand">
+            <summary>
+            <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.AddToWhitelistCommand"/> instance used by the <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Whitelist"/>
+            window.  Used to add or update the `P05-Whitelist Table`.
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.DeleteFromWhitelistCommand">
+            <summary>
+            <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.DeleteFromWhitelistCommand"/> instance used by the <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Whitelist"/>
+            window.  Used to delete from the `P05-Whitelist Table`.
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Match">
+            <summary>
+            Method to apply Regular Expression matching to the list of
+            NetForum tables.
+            </summary>
+            <returns><seealso cref="!:List&lt;string&gt;"/> of matching Tables.</returns>
+            <remarks>Updates the `Matches` property.</remarks>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.ReadWhitelist">
+            <summary>
+            Method used to populate the `Whitelist` property from the
+            `P05-Whitelist Table`.
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.SelectedTable">
+            <summary>
+            The currently selected <see cref="T:AAP.Applications.NetforumDataPurge.ConsoleApp.NetForum.Entities.IgnoredTable"/>
+            by the user.
+            </summary>
+            <remarks>
+            Applies the selected Regular Expression to the `Regex` property
+            and performs a `Match`.
+            </remarks>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.SaveRegex">
+            <summary>
+            Saves the current Regular Expression to
+            the `P05-Whitelist Table`.
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.Dispose">
+            <summary>
+            <seealso cref="T:System.IDisposable"/> implementation.
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel.DeleteRegex(AAP.Applications.NetforumDataPurge.ConsoleApp.NetForum.Entities.IgnoredTable)">
+            <summary>
+            Removes the selected <see cref="T:AAP.Applications.NetforumDataPurge.ConsoleApp.NetForum.Entities.IgnoredTable"/>
+            from the `P05-Whitelist Table`.
+            </summary>
+            <param name="regex"></param>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Program.Startup">
+            <summary>
+            The instance of <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Program.Startup"/> used to build the
+            application in this AppDomain.
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.Program.Main(System.String[])">
+            <summary>
+            Application entry point.  Creates an instance of <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Program.Startup"/>
+            then requests a `Host` from it and runs it.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.Properties.CanBeNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could be <c>null</c> sometimes,
+            so checking for <c>null</c> is required before its usage.
+            </summary>
+            <example><code>
+            [CanBeNull] object Test() => null;
+            
+            void UseTest() {
+              var p = Test();
+              var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
+            }
+            </code></example>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.Properties.ImplicitUseKindFlags">
+            <summary>
+            Specify the details of implicitly used symbol when it is marked
+            with <see cref="!:MeansImplicitUseAttribute"/> or <see cref="!:UsedImplicitlyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:AAP.Applications.NetforumDataPurge.ConsoleApp.Properties.ImplicitUseKindFlags.Access">
+            <summary>Only entity marked with attribute considered used.</summary>
+        </member>
+        <member name="F:AAP.Applications.NetforumDataPurge.ConsoleApp.Properties.ImplicitUseKindFlags.Assign">
+            <summary>Indicates implicit assignment to a member.</summary>
+        </member>
+        <member name="F:AAP.Applications.NetforumDataPurge.ConsoleApp.Properties.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
+            <summary>
+            Indicates implicit instantiation of a type with fixed constructor signature.
+            That means any unused constructor parameters won't be reported as such.
+            </summary>
+        </member>
+        <member name="F:AAP.Applications.NetforumDataPurge.ConsoleApp.Properties.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
+            <summary>Indicates implicit instantiation of a type.</summary>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.Properties.ImplicitUseTargetFlags">
+            <summary>
+            Specify what is considered to be used implicitly when marked
+            with <see cref="!:MeansImplicitUseAttribute"/> or <see cref="!:UsedImplicitlyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:AAP.Applications.NetforumDataPurge.ConsoleApp.Properties.ImplicitUseTargetFlags.Members">
+            <summary>Members of entity marked with attribute are considered used.</summary>
+        </member>
+        <member name="F:AAP.Applications.NetforumDataPurge.ConsoleApp.Properties.ImplicitUseTargetFlags.WithMembers">
+            <summary>Entity marked with attribute and all its members considered used.</summary>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.Properties.NotifyPropertyChangedInvocatorAttribute">
+             <summary>
+             Indicates that the method is contained in a type that implements
+             <c>System.ComponentModel.INotifyPropertyChanged</c> interface and this method
+             is used to notify that some property value changed.
+             </summary>
+             <remarks>
+             The method should be non-static and conform to one of the supported signatures:
+             <list>
+             <item><c>NotifyChanged(string)</c></item>
+             <item><c>NotifyChanged(params string[])</c></item>
+             <item><c>NotifyChanged{T}(Expression{Func{T}})</c></item>
+             <item><c>NotifyChanged{T,U}(Expression{Func{T,U}})</c></item>
+             <item><c>SetProperty{T}(ref T, T, string)</c></item>
+             </list>
+             </remarks>
+             <example><code>
+             public class Foo : INotifyPropertyChanged {
+               public event PropertyChangedEventHandler PropertyChanged;
+             
+               [NotifyPropertyChangedInvocator]
+               protected virtual void NotifyChanged(string propertyName) { ... }
+            
+               string _name;
+             
+               public string Name {
+                 get { return _name; }
+                 set { _name = value; NotifyChanged("LastName"); /* Warning */ }
+               }
+             }
+             </code>
+             Examples of generated notifications:
+             <list>
+             <item><c>NotifyChanged("Property")</c></item>
+             <item><c>NotifyChanged(() =&gt; Property)</c></item>
+             <item><c>NotifyChanged((VM x) =&gt; x.Property)</c></item>
+             <item><c>SetProperty(ref myField, value, "Property")</c></item>
+             </list>
+             </example>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.Properties.NotNullAttribute">
+            <summary>
+            Indicates that the value of the marked element can never be <c>null</c>.
+            </summary>
+            <example><code>
+            [NotNull] object Foo() {
+              return null; // Warning: Possible 'null' assignment
+            }
+            </code></example>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.Startup">
+             <summary>
+             The `Startup` class interprets the command line
+             to determine the mode of the application
+             (Console, Windows Service, GUI)
+             and set up the application <see cref="T:Microsoft.Extensions.Hosting.IHost"/> accordingly.
+             </summary>
+             <remarks>
+             ### Dependency Injection
+             [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/)
+             is utilized to provide DI to the application.  Depending on the mode the application
+             is running determines what objects are assigned to be constructed by DI.
+            
+             ### Configuration
+             Configuration is provided by both the classic `App.config` file to support the
+             NetForum ORM and the newer
+             [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration/) based
+             `appsettings.json` paradigm for all other configuration.
+            
+             ### `NfDbConnection` Factory
+             The `Startup` class has a method that creates NetForum Connections and appropriately
+             populates their connection string.
+            
+             ### Hosting
+             [Microsoft.Extensions.Hosting](https://www.nuget.org/packages/Microsoft.Extensions.Hosting/) is
+             used to coordinate the lifecycle of the DI, Logging and Configuration via a standard methodology
+             implemented by the <seealso cref="T:Microsoft.Extensions.Hosting.HostBuilder"/> object.  There is a `ConsoleHost` which is registered with
+             DI for when the application is not running as a GUI, and a `WpfHost` for when the application is running
+             as a GUI.
+             </remarks>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Startup.StatusBarViewModel">
+            <summary>
+            Shared instance of <seealso cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Startup.StatusBarViewModel"/> for
+            code that is not attached to a GUI Window, but may want to update a GUI window
+            if there is one available.
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.Startup.BuildHost(System.String[])">
+            <summary>
+            Entry point to obtaining an instance of <seealso cref="T:Microsoft.Extensions.Hosting.IHost"/>
+            which controls the state of the application.
+            </summary>
+            <param name="args"></param>
+            <returns>Configured and built host.</returns>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Startup.EntryLocation">
+            <summary>
+            The path where this AppDomain was initialized.
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Startup.Host">
+            <summary>
+            <seealso cref="T:Microsoft.Extensions.Hosting.IHost"/> instance built from command line
+            options.
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Startup.Services">
+            <summary>
+            Configured Service Provider for the global context.  **Should not be referenced
+            from the Launcher's AppDomain!**
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.Startup.Logger">
+            <summary>
+            Configured Logger for the global context.  **Should not be referenced
+            from the Launcher's AppDomain!**
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.Startup.GetConnection(System.IServiceProvider)">
+            <summary>
+            Creates instances of NfDbConnection
+            </summary>
+            <param name="provider"></param>
+            <returns><seealso cref="T:Avectra.netForum.Common.NfDbConnection"/> populated with appropriate
+            connection string based on number of threads being used.</returns>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.Startup.Conn_InfoMessage(System.Object,Avectra.netForum.Common.NfDbInfoMessageEventArgs)">
+            <summary>
+            Handles `NfDbConnection`'s async information event.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+            <remarks>
+            Stores error messages on an instance of <see cref="T:AAP.Applications.NetforumDataPurge.ConsoleApp.Helpers.Debugging.ThreadHelper"/>
+            for consumption at a different point on the call stack in the same thread.
+            </remarks>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.App">
+            <summary>
+            Application definition for NetForum Purge Service
+            GUI Windows.
+            </summary>
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.App.Services">
+            <summary>
+            <see cref="T:System.IServiceProvider"/> instance from
+            [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/) package.
+            </summary>
+            <remarks>
+            Dependency Injection is used throughout the application except where IDisposable instances must be immediately
+            disposed.
+            </remarks>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.App.#ctor(System.IServiceProvider)">
+            <summary>
+            Created by the <see cref="T:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.WpfHost"/>.
+            </summary>
+            <param name="services"><see cref="T:System.IServiceProvider"/>
+            instance for the <see cref="T:System.AppDomain"/>.</param>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.App.Cleanup">
+            <summary>
+            Called from [Launcher](#launcher) to stop the main window.
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Converters.TableTemplateSelector">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Converters.TableTemplateSelector.SelectTemplate(System.Object,System.Windows.DependencyObject)">
+            <summary>
+            
+            </summary>
+            <param name="item"></param>
+            <param name="container"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.Dashboard">
+            <summary>
+            Interaction logic for Dashboard.xaml
+            </summary>
+            <summary>
+            Dashboard
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.Dashboard.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.MainWindow">
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+            <summary>
+            MainWindow
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.MainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.Schedule">
+            <summary>
+            Schedule
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.Schedule.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.Whitelist">
+            <summary>
+            Provides user interface for managing the [Whitelisting](#whitelisting) patterns.
+            </summary>
+            <summary>
+            Whitelist
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.Whitelist.ServiceProvider">
+            <summary>
+            <see cref="T:System.IServiceProvider"/> instance from
+            [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/) package.
+            </summary>
+            <remarks>
+            Dependency Injection is used throughout the application except where IDisposable instances must be immediately
+            disposed.
+            </remarks>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.Whitelist.StatusBarViewModel">
+            <summary>
+            Local copy of the <see cref="P:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.Whitelist.StatusBarViewModel"/>.  Used to
+            drive the status bar of this Window.
+            </summary>
+        </member>
+        <member name="P:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.Whitelist.ViewModel">
+            <summary>
+            Instance of <see cref="T:AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel"/> that holds the
+            data and logic for this Window.
+            </summary>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.Whitelist.#ctor(System.IServiceProvider,AAP.Applications.NetforumDataPurge.ConsoleApp.Mvvm.ViewModels.WhitelistViewModel)">
+            <summary>
+            Public constructor for this Window.
+            </summary>
+            <param name="serviceProvider"></param>
+            <param name="viewModel"></param>
+            <remarks>
+            _Parameters constructed by Dependency Injection._
+            </remarks>
+        </member>
+        <member name="M:AAP.Applications.NetforumDataPurge.ConsoleApp.WPF.Forms.Whitelist.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+    </members>
+</doc>

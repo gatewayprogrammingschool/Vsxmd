@@ -2,7 +2,7 @@
   "profiles": {
     "Vsxmd": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\GitHub\\GPS\\Vsxmd\\Vsxmd\\Vsxmd.xml"
+      "commandLineArgs": "C:\\GitHub\\GPS\\Vsxmd\\Vsxmd\\ConsoleApp.xml"
     }
   }
 }
