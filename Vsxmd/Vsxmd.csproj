@@ -20,7 +20,7 @@
   <!-- NuGet Metadata: https://docs.microsoft.com/en-us/dotnet/core/tools/csproj#nuget-metadata-properties -->
   <PropertyGroup>
     <Title>Vsxmd.Ninja</Title>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Authors>Junle Li, Sales Lessa Lopes</Authors>
     <Description>VS XML documentation -&gt; Markdown syntax.</Description>
     <Copyright>Copyright 2015-Present</Copyright>
@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- The parameter _PackageFiles is declared in NuGet.Build.Tasks.Pack.targets -->
-    <_PackageFiles Include="bin\$(Configuration)\$(TargetFramework)\publish\Vsxmd.*" PackagePath="tools\win-x64\" />
+    <_PackageFiles Include="bin\release\$(TargetFramework)\publish\Vsxmd.*" PackagePath="tools\win-x64\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\LICENSE" Link="LICENSE" PackagePath="\" />
